@@ -7,7 +7,8 @@
  * Add in ccnet.exe.config
  ```
 <cruiseServer>
-  <extension type="ccnet.custombranchcore.plugin.CustomBranchPlugin,ccnet.custombranchcore.plugin" />
+      ...
+      <extension type="ccnet.custombranchcore.plugin.CustomBranchPlugin,ccnet.custombranchcore.plugin" />
 </cruiseServer>
 ```
 
@@ -17,7 +18,7 @@
  * Add in dashboard.config
 ```
 <projectPlugins>
-      ....
+      ...
       <customBranchPlugin />
 </projectPlugins>
 ```
@@ -27,7 +28,7 @@
  * Add in your config
 ```
 <labeller type="getBranches">
-  <branches>
-  </branches>
+      <branches>
+      </branches>
 </labeller>
 ```
