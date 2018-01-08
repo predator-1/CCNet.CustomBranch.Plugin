@@ -12,9 +12,16 @@ namespace CCNet.CustomBranch.Plugin
         public HtmlFragmentResponse GenerateAllBranchesView(IProjectSpecifier projectSpecifier, string sessionToken, string currentBranch, string[] branches)
         {
             string html = "<form method=\"POST\">";
-            html += string.Format("<h2>{0}</h2>", currentBranch);
-            html += GetSelect(branches);
-            html += "<button>Change</button>";
+            html += string.Format("<h2>Current branch - {0}</h2>", currentBranch);
+            if (branches != null)
+            {
+                html += GetSelect(branches);
+                html += "<button>Change</button>";
+            }
+            else
+            {
+                html += "<h2>Sorry, I can't get branches.</h2>";
+            }
             html += "</form>";
             return new HtmlFragmentResponse(html);
         }

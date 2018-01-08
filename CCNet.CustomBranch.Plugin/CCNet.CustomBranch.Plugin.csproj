@@ -55,6 +55,7 @@
     <Compile Include="AllBranchesBuilder.cs" />
     <Compile Include="CustomBranchPlugin.cs" />
     <Compile Include="CustomBranchAction.cs" />
+    <Compile Include="CustomMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
