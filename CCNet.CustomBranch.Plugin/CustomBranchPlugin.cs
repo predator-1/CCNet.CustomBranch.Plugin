@@ -1,6 +1,7 @@
 ﻿using System;
 using Exortech.NetReflector;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml;
@@ -60,10 +61,11 @@ namespace CCNet.CustomBranch.Plugin
             if (!string.IsNullOrEmpty(res))
             {
                 ChangeBranch(cruiseRequest.Request.GetText(res));
-                Thread.Sleep(sleep);
             }
-
-            return viewBuilder.GenerateAllBranchesView(projectSpecifier, retrieveSessionToken, GetCurrentBranch(), GetBranchNames());
+            SetBranchNames();
+            Thread.Sleep(sleep);
+            string project = cruiseManagerWrapper.GetProject(projectSpecifier, retrieveSessionToken);
+            return viewBuilder.GenerateAllBranchesView(projectSpecifier, retrieveSessionToken, GetCurrentBranch(project), GetBranchNames(project));
         }
 
         public string LinkDescription
@@ -76,7 +78,7 @@ namespace CCNet.CustomBranch.Plugin
             get { return new INamedAction[] { new CustomBranchAction(ACTION_NAME, this) }; }
         }
 
-        public string[] GetBranchNames()
+        private void SetBranchNames()
         {
             var project = cruiseManagerWrapper.GetProject(projectSpecifier, retrieveSessionToken);
             XmlDocument projectXml = new XmlDocument();
@@ -105,15 +107,11 @@ namespace CCNet.CustomBranch.Plugin
                 }
                 
                 SendMassage(MessageBuildGetBranchNames("GetAllBranches", sourcecontrolType, repo, workingDirectory));
-                
             }
-
-            return new []{"1", "2", "3"};
         }
 
-        private string GetCurrentBranch()
+        private string GetCurrentBranch(string project)
         {
-            var project = cruiseManagerWrapper.GetProject(projectSpecifier, retrieveSessionToken);
             XmlDocument projectXml = new XmlDocument();
             projectXml.LoadXml(project);
             var nodes = projectXml.GetElementsByTagName("branch");
@@ -121,7 +119,7 @@ namespace CCNet.CustomBranch.Plugin
             {
                 return nodes[0].InnerText;
             }
-            return "Error";
+            return "Sourcecontrol not found";
         }
 
         private void ChangeBranch(string name)
@@ -162,6 +160,27 @@ namespace CCNet.CustomBranch.Plugin
                 WorkingDirectory = workingDirectory
             };
             return customMessage;
+        }
+
+        private string[] GetBranchNames(string project)
+        {
+            XmlDocument projectXml = new XmlDocument();
+            projectXml.LoadXml(project);
+            var branches = projectXml.GetElementsByTagName("branches");
+            if (branches.Count > 0)
+            {
+                var values = branches[0].ChildNodes;
+                if (values.Count > 0)
+                {
+                    List<string> strValues = new List<string>();
+                    foreach (XmlNode value in values)
+                    {
+                        strValues.Add(value.InnerText);
+                    }
+                    return strValues.ToArray();
+                }
+            }
+            return null;
         }
     }
  

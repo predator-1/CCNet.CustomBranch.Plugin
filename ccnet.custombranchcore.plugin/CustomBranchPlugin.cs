@@ -15,7 +15,6 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Xml.Linq;
 using System.Text.RegularExpressions;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol.Mercurial;
 
 namespace ccnet.custombranchcore.plugin
 {
@@ -121,14 +120,12 @@ namespace ccnet.custombranchcore.plugin
 
         private string SetAllBranches(string xml, CustomMessage customMessage)
         {
-            XDocument doc = XDocument.Parse(xml);
-            doc.ToString();
             if (customMessage.SourcecontrolType == "hg")
             {
                 HgService hgService = new HgService(customMessage.Repo, customMessage.WorkingDirectory);
                 var branches = hgService.GetAllBranches();
                 if(branches.Any())
-                    return SetBranchesToLabler(branches);
+                    return SetBranchesToLabler(branches, xml);
             }
             return "";
         }
@@ -176,9 +173,20 @@ namespace ccnet.custombranchcore.plugin
             return null;
         }
 
-        private string SetBranchesToLabler(List<string> branches)
+        private string SetBranchesToLabler(List<string> branches, string xml)
         {
-            return "";
+            string oldBranches = xml;
+            int startLabel = oldBranches.IndexOf("<labeller type=\"getBranches\">", StringComparison.Ordinal) + "<labeller type=\"getBranches\">".Length;
+            oldBranches = oldBranches.Remove(0, startLabel);
+            int endLabel = oldBranches.IndexOf("</labeller>", StringComparison.Ordinal);
+            oldBranches = oldBranches.Remove(endLabel, oldBranches.Length - endLabel);
+            string newBranches = "\r\n<branches>\r\n";
+            foreach (var branch in branches)
+            {
+                newBranches += $"<value>{branch}</value>\r\n";
+            }
+            newBranches += "\r\n</branches>\r\n";
+            return xml.Replace(oldBranches, newBranches);
         }
 
     }
