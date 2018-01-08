@@ -54,13 +54,13 @@ namespace CCNet.CustomBranch.Plugin
 
         public IResponse Execute(ICruiseRequest cruiseRequest)
         {
-            var res = cruiseRequest.Request.FindParameterStartingWith("Branch");
+            var branch = cruiseRequest.Request.FindParameterStartingWith("Branch");
             projectSpecifier = cruiseRequest.ProjectSpecifier;
             retrieveSessionToken = cruiseRequest.RetrieveSessionToken();
             serverSpecifier = cruiseRequest.ServerSpecifier;
-            if (!string.IsNullOrEmpty(res))
+            if (!string.IsNullOrEmpty(branch))
             {
-                ChangeBranch(cruiseRequest.Request.GetText(res));
+                ChangeBranch(cruiseRequest.Request.GetText(branch));
             }
             SetBranchNames();
             Thread.Sleep(sleep);

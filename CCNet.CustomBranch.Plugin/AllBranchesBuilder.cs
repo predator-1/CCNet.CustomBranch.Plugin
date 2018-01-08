@@ -1,7 +1,4 @@
-﻿using Exortech.NetReflector;
-using System.Collections;
-using System.IO;
-using System.Text;
+﻿using System.Web;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 
@@ -34,7 +31,7 @@ namespace CCNet.CustomBranch.Plugin
             {
                 if (!string.IsNullOrEmpty(branch))
                 {
-                    select+= string.Format("<option value=\"{0}\">{0}</option>", branch);
+                    select+= string.Format("<option value=\"{0}\">{1}</option>", HttpUtility.HtmlEncode(branch), branch);
                 }
             }
             return select + "</select><p><p><p>";

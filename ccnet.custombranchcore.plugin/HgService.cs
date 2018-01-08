@@ -45,7 +45,7 @@ namespace ccnet.custombranchcore.plugin
             };
 
             proc.Start();
-            proc.WaitForExit(5000);
+            proc.WaitForExit(30000);
             while (!proc.StandardOutput.EndOfStream)
             {
                 return proc.StandardOutput.ReadToEnd();

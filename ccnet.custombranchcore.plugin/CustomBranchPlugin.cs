@@ -22,8 +22,6 @@ namespace ccnet.custombranchcore.plugin
     {
         private ICruiseServer server;
         private static string ccNetConfigFileName = "ccnet.config";
-        private static string branchSectionName = "BranchName";
-        private static string projectNameSectionName = "TargetEnvironment";
 
         public void Initialise(ICruiseServer server,
             ExtensionConfiguration extensionConfig)
@@ -89,7 +87,11 @@ namespace ccnet.custombranchcore.plugin
             CustomConfig cfg = GetProjectCfg(fileSystem, projectName);
             if (cfg != null)
             {
-                fileSystem.Save(cfg.Href, ChangeBranch(cfg.CurrentConfigTxt, branchName));
+                string xmlChanged = ChangeBranch(cfg.CurrentConfigTxt, branchName);
+                if (!string.IsNullOrEmpty(xmlChanged))
+                {
+                    fileSystem.Save(cfg.Href, xmlChanged);
+                }
             }
         }
 
@@ -109,13 +111,78 @@ namespace ccnet.custombranchcore.plugin
 
         private bool IsCurrentProjectCfg(string xml, string projectName)
         {
-            return xml.Contains($"{projectNameSectionName}=\"{projectName}\"");
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(xml);
+            var projectsList = xmlDocument.GetElementsByTagName("project");
+            if (projectsList.Count > 0)
+            {
+                XmlNode project = projectsList[0];
+                var attributes = project.Attributes;
+                foreach (XmlAttribute attribute in attributes)
+                {
+                    if (attribute.Name == "name")
+                    {
+                        string currentProjectName = attribute.Value;
+
+                        MatchCollection matches =
+                            new Regex("\\$\\((?<name>.*?)\\)").Matches(attribute.Value);
+
+                        if (matches.Count > 0)
+                        {
+                            var scope = project.ParentNode;
+
+                            foreach (Match match in matches)
+                            {
+                                foreach (XmlAttribute scopeAtr in scope.Attributes)
+                                {
+                                    string atrName = match.Groups["name"].Value;
+                                    if (scopeAtr.Name == atrName)
+                                    {
+                                        currentProjectName =
+                                            currentProjectName.Replace($"$({atrName})", scopeAtr.Value);
+                                    }
+                                }
+
+                            }
+                            
+                        }
+                        return currentProjectName == projectName;
+
+                    }
+                }
+            }
+            return false;
         }
 
         private string ChangeBranch(string xml, string branchName)
         {
-            string currentBranch = new Regex(branchSectionName + "=\"(?<name>.*?)\"").Match(xml).Groups["name"].Value;
-            return xml.Replace($"{branchSectionName}=\"{currentBranch}\"", $"{branchSectionName}=\"{branchName}\"");
+            XmlDocument xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(xml);
+            var sourceControlNodes = xmlDocument.GetElementsByTagName("sourcecontrol");
+            if (sourceControlNodes.Count > 0)
+            {
+                var sourceControlcfgNodes = sourceControlNodes[0].ChildNodes;
+                foreach (XmlNode sourceControlcfgNode in sourceControlcfgNodes)
+                {
+                    if (sourceControlcfgNode.Name == "branch")
+                    {
+                        if (sourceControlcfgNode.InnerText.StartsWith("$"))
+                        {
+                            branchName = branchName.Replace("&", "&amp;").Replace("\"", "&quot;").Replace("'", "&apos;");
+                            string scopeAtr =
+                                sourceControlcfgNode.InnerText.TrimStart('$').TrimStart('(').TrimEnd(')');
+                            string currentBranch = new Regex(scopeAtr + "=\"(?<name>.*?)\"").Match(xml).Groups["name"].Value;
+                            return xml.Replace($"{scopeAtr}=\"{currentBranch}\"", $"{scopeAtr}=\"{branchName}\"");
+                        }
+                        else
+                        {
+                            branchName = branchName.Replace("<", "&lt;").Replace(">", "&gt;");
+                            return xml.Replace($"<branch>{sourceControlcfgNode.InnerText}</branch>", $"<branch>{branchName}</branch>");
+                        }
+                    }
+                }
+            }
+            return "";
         }
 
         private string SetAllBranches(string xml, CustomMessage customMessage)
