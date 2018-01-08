@@ -1,24 +1,15 @@
 ﻿using System;
 using Exortech.NetReflector;
-using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Xml;
-using ThoughtWorks.CruiseControl.Core;
 using ThoughtWorks.CruiseControl.Core.Reporting.Dashboard.Navigation;
-using ThoughtWorks.CruiseControl.Core.Sourcecontrol;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Messages;
-using ThoughtWorks.CruiseControl.WebDashboard.Configuration;
 using ThoughtWorks.CruiseControl.WebDashboard.Dashboard;
 using ThoughtWorks.CruiseControl.WebDashboard.IO;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC;
 using ThoughtWorks.CruiseControl.WebDashboard.MVC.Cruise;
-using ThoughtWorks.CruiseControl.WebDashboard.MVC.View;
-using ThoughtWorks.CruiseControl.WebDashboard.Plugins.CCTray;
 using ThoughtWorks.CruiseControl.WebDashboard.ServerConnection;
-using System.Xml.Serialization;
 using System.Threading;
 
 namespace CCNet.CustomBranch.Plugin
@@ -30,25 +21,17 @@ namespace CCNet.CustomBranch.Plugin
         private static int sleep = 3000;
 
         private readonly IFarmService farmService;
-        private readonly IVelocityViewGenerator viewGenerator;
-        private readonly ILinkFactory linkFactory;
         private readonly AllBranchesBuilder viewBuilder;
-        private readonly IRemoteServicesConfiguration configuration;
-        private ICruiseUrlBuilder urlBuilder;
         private ICruiseManagerWrapper cruiseManagerWrapper;
         private IProjectSpecifier projectSpecifier;
         private string retrieveSessionToken;
         private IServerSpecifier serverSpecifier;
 
-        public CustomBranchPlugin(AllBranchesBuilder viewBuilder, IFarmService farmService, IVelocityViewGenerator viewGenerator, ILinkFactory linkFactory,
-            IRemoteServicesConfiguration configuration, ICruiseUrlBuilder urlBuilder, ICruiseManagerWrapper cruiseManagerWrapper)
+        public CustomBranchPlugin(AllBranchesBuilder viewBuilder, IFarmService farmService,
+            ICruiseManagerWrapper cruiseManagerWrapper)
         {
             this.viewBuilder = viewBuilder;
             this.farmService = farmService;
-            this.viewGenerator = viewGenerator;
-            this.linkFactory = linkFactory;
-            this.configuration = configuration;
-            this.urlBuilder = urlBuilder;
             this.cruiseManagerWrapper = cruiseManagerWrapper;
         }
 

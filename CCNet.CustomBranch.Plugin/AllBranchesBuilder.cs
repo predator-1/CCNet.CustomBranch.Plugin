@@ -8,8 +8,9 @@ namespace CCNet.CustomBranch.Plugin
     {
         public HtmlFragmentResponse GenerateAllBranchesView(IProjectSpecifier projectSpecifier, string sessionToken, string currentBranch, string[] branches)
         {
+            string color = currentBranch == "Sourcecontrol not found" ? "#ff0000" : "#2E8A2E";
             string html = "<form method=\"POST\">";
-            html += string.Format("<h2>Current branch - {0}</h2>", currentBranch);
+            html += string.Format("<h2>Current branch - <font color=\"{1}\">{0}</font></h2>", currentBranch, color);
             if (branches != null)
             {
                 html += GetSelect(branches);
@@ -17,7 +18,7 @@ namespace CCNet.CustomBranch.Plugin
             }
             else
             {
-                html += "<h2>Sorry, I can't get branches.</h2>";
+                html += "<h2><font color=\"#ff0000\">Sorry, I can't get branches.</font></h2>";
             }
             html += "</form>";
             return new HtmlFragmentResponse(html);
