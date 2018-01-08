@@ -1,7 +1,8 @@
 # Usage
-You need to add some configs in your project and CCnet
+ * You need to add some configs in your project and CCnet.
+ * Work's only with Mercurial
 
-# CruiseControl.NET console
+## CruiseControl.NET console
  * Add ccnet.custombranchcore.plugin.dll in main path.
  * Add in ccnet.exe.config
  ```
@@ -11,7 +12,7 @@ You need to add some configs in your project and CCnet
 ```
 
 
-# CruiseControl.NET WebDashboard
+## CruiseControl.NET WebDashboard
  * Add CCNet.CustomBranch.Plugin.dll in \bin
  * Add in dashboard.config
 ```
@@ -22,7 +23,7 @@ You need to add some configs in your project and CCnet
 ```
 
 
-# Include project config
+## Include project config
  * Add in your config
 ```
 <labeller type="getBranches">
