@@ -1,20 +1,14 @@
-﻿using Exortech.NetReflector;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ThoughtWorks.CruiseControl.Core;
-using ThoughtWorks.CruiseControl.Core.Config;
 using ThoughtWorks.CruiseControl.Core.Util;
 using ThoughtWorks.CruiseControl.Remote;
 using ThoughtWorks.CruiseControl.Remote.Events;
-using ThoughtWorks.CruiseControl.Remote.Messages;
 using System.Xml;
 using System.Xml.Serialization;
 using System.IO;
-using System.Xml.Linq;
 using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using System.Linq;
 
 namespace ccnet.custombranchcore.plugin
 {
@@ -191,7 +185,7 @@ namespace ccnet.custombranchcore.plugin
             {
                 HgService hgService = new HgService(customMessage.Repo, customMessage.WorkingDirectory);
                 var branches = hgService.GetAllBranches();
-                if(branches.Any())
+                if(branches != null && branches.Count > 0)
                     return SetBranchesToLabler(branches, xml);
             }
             return "";
@@ -207,6 +201,44 @@ namespace ccnet.custombranchcore.plugin
             }
             if (!string.IsNullOrEmpty(ccNetCnfigTxt))
             {
+                /*
+                XmlDocument xmlDocument = new XmlDocument();
+                xmlDocument.LoadXml(ccNetCnfigTxt);
+                XmlNodeList includes = xmlDocument.GetElementsByTagName("cb:include");
+                if (includes.Count > 0)
+                {
+                    foreach (XmlNode include in includes)
+                    {
+                        string href = "";
+                        foreach (XmlAttribute atr in include.Attributes)
+                        {
+                            if (atr.Name == "href")
+                            {
+                                href = atr.Value;
+                            }
+                        }
+                        if (!string.IsNullOrEmpty(href))
+                        {
+                            var currentConfig = fileSystem.Load(href);
+                            string currentConfigTxt;
+                            using (currentConfig)
+                            {
+                                currentConfigTxt = currentConfig.ReadToEnd();
+                            }
+                            if (!string.IsNullOrEmpty(currentConfigTxt))
+                            {
+                                if (IsCurrentProjectCfg(currentConfigTxt, projectName))
+                                {
+                                    CustomConfig cfg = new CustomConfig();
+                                    cfg.CurrentConfigTxt = currentConfigTxt;
+                                    cfg.Href = href;
+                                    return cfg;
+                                }
+                            }
+                        }
+                    }
+                }*/
+                
                 XDocument doc = XDocument.Parse(ccNetCnfigTxt);
                 var nodes = doc.Root?.Nodes().Where(x => x.NodeType == XmlNodeType.Element).Select(x => x as XElement)
                     .Where(v => v.Name.LocalName == "include");

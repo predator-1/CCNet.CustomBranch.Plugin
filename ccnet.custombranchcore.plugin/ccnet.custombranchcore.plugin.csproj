@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5F835349-07BE-4FC8-A3E6-558BD1654E29}</ProjectGuid>
+    <ProjectGuid>{833C5DCB-A601-4E8B-B1D8-451654BA76ED}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ccnet.custombranchcore.plugin</RootNamespace>
     <AssemblyName>ccnet.custombranchcore.plugin</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -31,24 +31,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="NetReflector">
-      <HintPath>..\..\ccnet\CruiseControl.NET\lib\NetReflector.dll</HintPath>
+      <HintPath>..\..\..\..\Users\Maxim.N\Downloads\CruiseControl.NET-1.8.2.0\WebDashboard\bin\NetReflector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="ThoughtWorks.CruiseControl.Core">
-      <HintPath>..\..\ccnet\CruiseControl.NET\project\core\bin\Debug\ThoughtWorks.CruiseControl.Core.dll</HintPath>
+      <HintPath>..\..\..\..\Users\Maxim.N\Downloads\CruiseControl.NET-1.8.2.0\Server\ThoughtWorks.CruiseControl.Core.dll</HintPath>
     </Reference>
     <Reference Include="ThoughtWorks.CruiseControl.Remote">
-      <HintPath>..\..\ccnet\CruiseControl.NET\project\core\bin\Debug\ThoughtWorks.CruiseControl.Remote.dll</HintPath>
+      <HintPath>..\..\..\..\Users\Maxim.N\Downloads\CruiseControl.NET-1.8.2.0\Server\ThoughtWorks.CruiseControl.Remote.dll</HintPath>
     </Reference>
     <Reference Include="ThoughtWorks.CruiseControl.WebDashboard">
-      <HintPath>..\..\ccnet\CruiseControl.NET\project\WebDashboard\bin\ThoughtWorks.CruiseControl.WebDashboard.dll</HintPath>
+      <HintPath>..\..\..\..\Users\Maxim.N\Downloads\CruiseControl.NET-1.8.2.0\WebDashboard\bin\ThoughtWorks.CruiseControl.WebDashboard.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -61,4 +59,11 @@
     <Compile Include="SourceControlExt.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
 </Project>
