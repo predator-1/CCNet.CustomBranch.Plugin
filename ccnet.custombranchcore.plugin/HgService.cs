@@ -53,7 +53,7 @@ namespace ccnet.custombranchcore.plugin
 
         private void Pull()
         {
-            string command = "pull " + _repo;
+            string command = "pull";
             RunCommand(command);
         }
 
